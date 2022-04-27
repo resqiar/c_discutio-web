@@ -1,13 +1,43 @@
+# What's This?
+
+This is an example of a simple CRUD web application build with NextJS which consume [Golang API](https://github.com/resqiar/go-http-api/)s.
+
+**This is neither a production-ready nor following best practices project, which solely has a role for college assignments.**
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## REQUIREMENTS
 
-First, run the development server:
+Requirements before installing, make sure you have all these stuff:
+
+1. [NodeJS](https://nodejs.org/en/download/)
+2. [PostgreSQL](https://www.postgresql.org/download/)
+3. [Golang API](https://github.com/resqiar/go-http-api) (Backend), refer to its [documentation](https://github.com/resqiar/go-http-api#whats-this)
+
+## INSTALLATION
+
+First, run the install packages:
 
 ```bash
-npm run dev
+npm install
 # or
-yarn dev
+yarn install
+```
+
+Second, build the project
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+Finally, start the project
+
+```bash
+npm run start
+# or
+yarn start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
