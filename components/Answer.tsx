@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-
+import Router from "next/router";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -34,6 +34,10 @@ export default function Answer({ showAnswer, token, questionId, callBack }) {
 
   async function handleCreateAnswer(e) {
     e.preventDefault();
+
+    if (!token) {
+      return Router.push("/login");
+    }
 
     if (!answerText) return;
 
@@ -142,7 +146,7 @@ export default function Answer({ showAnswer, token, questionId, callBack }) {
 
   if (!showAnswer) return <></>;
 
-  if (answers.length === 0)
+  if (!answers || answers.length === 0)
     return (
       <div className="py-3">
         <p className="text-center py-5">No answers yet.</p>
@@ -285,8 +289,11 @@ export default function Answer({ showAnswer, token, questionId, callBack }) {
             ref={answerRef}
             type="text"
             className="form-control mr-3 mb-2 mb-sm-0"
-            placeholder="Help this question"
+            placeholder={
+              !token ? "You need to login first" : "Help this question"
+            }
             required
+            disabled={!token}
             onChange={(e) => setAnswerText(e.target.value)}
           />
           <button type="submit" className="btn btn-primary">

@@ -1,3 +1,4 @@
+import Router from "next/router";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -178,7 +179,21 @@ export default function DashboardPage() {
                   </a>
                 </div>
               </div>
-            ) : undefined}
+            ) : (
+              <div style={{ marginLeft: "8px" }}>
+                <div className="d-flex align-items-center">
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      Cookies.set("access_token", "");
+                      Router.push("/login");
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </nav>
