@@ -13,7 +13,7 @@ export default function LoginPage() {
     if (!emailInput || !passwordInput) return;
 
     try {
-      const result = await axios.post("http://localhost:8000/v1/auth/login", {
+      const result = await axios.post("http://localhost:8080/v1/auth/login", {
         email: emailInput,
         password: passwordInput,
       });

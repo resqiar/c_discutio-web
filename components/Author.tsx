@@ -6,7 +6,7 @@ export default function Author({ id }) {
 
   async function handleFetchAuthor() {
     try {
-      const result = await axios.get(`http://localhost:8000/v1/userid/${id}`);
+      const result = await axios.get(`http://localhost:8080/v1/userid/${id}`);
 
       if (result.status === 200 && result.data) {
         setAuthor(result.data.data);

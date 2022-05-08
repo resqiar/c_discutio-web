@@ -19,7 +19,7 @@ export default function Action({ token, questionId, callBack }) {
   async function handleFetchQuestion() {
     try {
       const result = await axios.get(
-        `http://localhost:8000/v1/question/${questionId}`
+        `http://localhost:8080/v1/question/${questionId}`
       );
 
       if (result.status === 200 && result.data) {
@@ -34,7 +34,7 @@ export default function Action({ token, questionId, callBack }) {
 
     try {
       const result = await axios.post(
-        "http://localhost:8000/v1/question/update",
+        "http://localhost:8080/v1/question/update",
         {
           id: questionId,
           title: title,
@@ -61,7 +61,7 @@ export default function Action({ token, questionId, callBack }) {
 
     try {
       const result = await axios.post(
-        "http://localhost:8000/v1/question/delete",
+        "http://localhost:8080/v1/question/delete",
         {
           id: questionId,
         },

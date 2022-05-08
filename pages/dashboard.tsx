@@ -24,6 +24,8 @@ export default function DashboardPage() {
 
   const [showAnswer, setShowAnswer] = useState("");
 
+  const [searchInput, setSearchInput] = useState("");
+
   function handleInit() {
     const isAuth = Cookies.get("access_token");
 
@@ -41,7 +43,7 @@ export default function DashboardPage() {
 
   async function handleFetchQuestions() {
     try {
-      const result = await axios.get("http://localhost:8000/v1/questions");
+      const result = await axios.get("http://localhost:8080/v1/questions");
 
       if (result.status === 200 && result.data) {
         setList(result.data.data);
@@ -54,7 +56,7 @@ export default function DashboardPage() {
 
     try {
       const result = await axios.post(
-        "http://localhost:8000/v1/question/create",
+        "http://localhost:8080/v1/question/create",
         {
           title: createTitle,
           desc: createDesc,
@@ -101,6 +103,24 @@ export default function DashboardPage() {
     handleInit();
     handleFetchQuestions();
   }, []);
+
+  async function handleSearch() {
+    if (!searchInput) return await handleFetchQuestions();
+    try {
+      const result = await axios.get(
+        `http://localhost:8080/v1/question/search?query=${searchInput}`
+      );
+
+      if (result.status === 200 && result.data) {
+        console.log(result.data);
+        setList([result.data.data]);
+      }
+    } catch (error) {}
+  }
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchInput]);
 
   return (
     <>
@@ -160,16 +180,15 @@ export default function DashboardPage() {
               </div>
             ) : undefined}
 
-            <form className="form-inline d-flex w-100 mr-5">
+            {/* SEARCH */}
+            <div className="form-inline d-flex w-100 mr-5 gap-2">
               <input
                 type="text"
-                className="form-control mr-3 mb-2 mb-sm-0"
-                placeholder="Search"
+                className="form-control mr-4 mb-2 mb-sm-0"
+                placeholder="Search question..."
+                onChange={(e) => setSearchInput(e.target.value)}
               />
-              <button type="submit" className="btn btn-dark">
-                Search
-              </button>
-            </form>
+            </div>
 
             {!isAuth?.status ? (
               <div id="login-status" style={{ marginLeft: "8px" }}>
@@ -203,48 +222,50 @@ export default function DashboardPage() {
         className="container mt-10"
         style={{ margin: "18px 8%", marginBottom: "10%" }}
       >
-        {list.map((value, index) => (
-          <div key={index} className="feed-items py-3 pl-5 border-bottom">
-            <div className="box-item-quora">
-              <div className="w-100" style={{ maxWidth: "700px" }}>
-                <div className="contentbox">
-                  <Author id={value.AuthorID} />{" "}
-                  <span>- {new Date(value.CreatedAt).toLocaleString()} </span>
-                  <span>
-                    - {value.Answers.length}{" "}
-                    {value.Answers.length > 1 ? "Peoples" : "People"} help this
-                    question
-                  </span>
-                  <button
-                    onClick={() => setShowAnswer(value.ID)}
-                    className="btn btn-sm btn-link"
-                  >
-                    Show Answer
-                  </button>
+        {list
+          .filter((item) => item.Title !== "")
+          .map((value, index) => (
+            <div key={index} className="feed-items py-3 pl-5 border-bottom">
+              <div className="box-item-quora">
+                <div className="w-100" style={{ maxWidth: "700px" }}>
+                  <div className="contentbox">
+                    <Author id={value.AuthorID} />{" "}
+                    <span>- {new Date(value.CreatedAt).toLocaleString()} </span>
+                    <span>
+                      - {value.Answers.length}{" "}
+                      {value.Answers.length > 1 ? "Peoples" : "People"} help
+                      this question
+                    </span>
+                    <button
+                      onClick={() => setShowAnswer(value.ID)}
+                      className="btn btn-sm btn-link"
+                    >
+                      Show Answer
+                    </button>
+                  </div>
+                  <div className="caption mt-1">
+                    <h5>{value.Title}</h5>
+                  </div>
+                  <div>
+                    <p>{value.Desc}</p>
+                  </div>
                 </div>
-                <div className="caption mt-1">
-                  <h5>{value.Title}</h5>
-                </div>
-                <div>
-                  <p>{value.Desc}</p>
-                </div>
+                {isValid(value.AuthorID) ? (
+                  <Action
+                    callBack={async () => await handleFetchQuestions()}
+                    token={isAuth.token}
+                    questionId={value.ID}
+                  />
+                ) : undefined}
               </div>
-              {isValid(value.AuthorID) ? (
-                <Action
-                  callBack={async () => await handleFetchQuestions()}
-                  token={isAuth.token}
-                  questionId={value.ID}
-                />
-              ) : undefined}
+              <Answer
+                showAnswer={showAnswer === value.ID}
+                callBack={async () => await handleFetchQuestions()}
+                token={isAuth.token}
+                questionId={value.ID}
+              />
             </div>
-            <Answer
-              showAnswer={showAnswer === value.ID}
-              callBack={async () => await handleFetchQuestions()}
-              token={isAuth.token}
-              questionId={value.ID}
-            />
-          </div>
-        ))}
+          ))}
       </div>
 
       {/* <form action="https://example.org/comments.php">

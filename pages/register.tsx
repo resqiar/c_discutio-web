@@ -25,7 +25,7 @@ export default function RegisterPage() {
 
     try {
       const result = await axios.post(
-        "http://localhost:8000/v1/auth/register",
+        "http://localhost:8080/v1/auth/register",
         {
           username: usernameInput,
           email: emailInput,

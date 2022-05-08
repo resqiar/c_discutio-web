@@ -23,7 +23,7 @@ export default function Answer({ showAnswer, token, questionId, callBack }) {
   async function handleFetchAnswers() {
     try {
       const result = await axios.get(
-        `http://localhost:8000/v1/question/${questionId}`
+        `http://localhost:8080/v1/question/${questionId}`
       );
 
       if (result.status === 200 && result.data) {
@@ -43,7 +43,7 @@ export default function Answer({ showAnswer, token, questionId, callBack }) {
 
     try {
       const result = await axios.post(
-        "http://localhost:8000/v1/answer/create",
+        "http://localhost:8080/v1/answer/create",
         {
           question_id: questionId,
           answer: answerText,
@@ -70,7 +70,7 @@ export default function Answer({ showAnswer, token, questionId, callBack }) {
 
     try {
       const result = await axios.post(
-        "http://localhost:8000/v1/answer/update",
+        "http://localhost:8080/v1/answer/update",
         {
           id: updateAnswer.id,
           answer: updateAnswer.text,
@@ -97,7 +97,7 @@ export default function Answer({ showAnswer, token, questionId, callBack }) {
 
     try {
       const result = await axios.post(
-        "http://localhost:8000/v1/answer/delete",
+        "http://localhost:8080/v1/answer/delete",
         {
           id: deleteAnswer.id,
         },
